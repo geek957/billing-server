@@ -7,11 +7,16 @@ app = Flask(__name__)
 
 @app.route('/ping', methods=['GET'])
 def ping():
+    client_ip = request.remote_addr
+    print(f"Client IP: {client_ip}")
     print('Pong')
     return 'pong', 200
 
 @app.route('/search', methods=['POST'])
 def search():
+    client_ip = request.remote_addr
+    print(f"Client IP: {client_ip}")
+
     if 'image' not in request.files:
         return jsonify({"error": "No image file provided"}), 400
 
