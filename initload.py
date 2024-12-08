@@ -12,7 +12,7 @@ processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch16")
 embeddings = {}
 products = {}
 
-def extract_frames(video_path, frame_rate=1):
+def extract_frames(video_path, frame_rate=2):
     video_capture = cv2.VideoCapture(video_path)
     total_frames = int(video_capture.get(cv2.CAP_PROP_FRAME_COUNT))
     fps = video_capture.get(cv2.CAP_PROP_FPS)
@@ -31,13 +31,16 @@ def extract_frames(video_path, frame_rate=1):
     return frames
 
 def load_embeddings():
-    path_to_videos = "./sourceData/"
+    path_to_videos = "./sourceDataVideos/"
     videos = os.listdir(path_to_videos)
     print(videos)
+    count = 0
     for video in videos:
+        print("--------------------- Processing video: ", count, video)
+        count += 1
         video_path = os.path.join(path_to_videos, video)
         frames = extract_frames(video_path)
-        id = video.split(".")[0]
+        id = video.split("_")[0]
         frame_number = 0
         for frame in frames:
             image = Image.fromarray(frame)
