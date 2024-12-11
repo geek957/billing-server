@@ -1,7 +1,6 @@
 from initload import model, processor, embeddings, products
 from PIL import Image
 import torch
-import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 

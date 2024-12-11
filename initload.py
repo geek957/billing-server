@@ -53,7 +53,7 @@ def load_embeddings():
 
 def load_products():
     # Read the CSV file
-    df = pd.read_csv('dataMap.CSV')
+    df = pd.read_csv('output.csv')
 
     # Create the dictionary
     for _, row in df.iterrows():
