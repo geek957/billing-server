@@ -18,7 +18,7 @@ products = {}
 def load_precomputed_embeddings():
     embedding_path = "./run_1/embeddings.pt"
     global embeddings 
-    embeddings = torch.load(embedding_path)
+    embeddings = torch.load(embedding_path,  map_location=get_device_type())
     # print(len(embeddings))
 
 def load_products():

@@ -7,10 +7,10 @@ from utils import get_device_type
 
 def searchProduct(image):
     # Process the input image
-    resultsMasked = object_detector.predict(image, "hand, no background, no object")
-    masked_image = object_detector.hide_mask(image, resultsMasked)
-    cropped_image = object_detector.predict_and_crop_image(masked_image, "object, no hand, no background")
-    inputs = processor(images=cropped_image, return_tensors="pt", padding=True).to(get_device_type())
+    #resultsMasked = object_detector.predict(image, "hand, no background, no object")
+    #masked_image = object_detector.hide_mask(image, resultsMasked)
+    #cropped_image = object_detector.predict_and_crop_image(masked_image, "object, no hand, no background")
+    inputs = processor(images=image, return_tensors="pt", padding=True).to(get_device_type())
     with torch.no_grad():
         features = model(**inputs)
 
