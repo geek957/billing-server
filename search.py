@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from utils import get_device_type
 
-def searchProduct(image):
+def searchProduct(image, merchant_id):
     # Process the input image
     #resultsMasked = object_detector.predict(image, "hand, no background, no object")
     #masked_image = object_detector.hide_mask(image, resultsMasked)
@@ -22,7 +22,7 @@ def searchProduct(image):
 
     # Calculate cosine similarities
     similarities = []
-    for id, embedding in embeddings.items():
+    for id, embedding in embeddings[merchant_id].items():
         if(get_device_type() == 'cuda'):
             embedding.image_embeds = embedding.image_embeds.to(torch.float32)
         embedding = embedding.image_embeds.detach().cpu().numpy()
@@ -32,8 +32,10 @@ def searchProduct(image):
     closest_id, _ = max(similarities, key=lambda item: item[1])
     closest_id = closest_id.split("_")[0]
 
-    product_details = products[closest_id]
+    product_details = products[merchant_id][closest_id]
     print(product_details)
+    if product_details is None:
+        raise Exception("No product found")
     return product_details
 
 # Example usage

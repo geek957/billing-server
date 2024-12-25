@@ -16,10 +16,17 @@ embeddings = {}
 products = {}
 
 def load_precomputed_embeddings():
-    embedding_path = "./run_1/embeddings.pt"
+    embeddings_folder = "./run_1"
+    allFiles = os.listdir(embeddings_folder)
+    print(allFiles)
     global embeddings 
-    embeddings = torch.load(embedding_path,  map_location=get_device_type())
-    # print(len(embeddings))
+    for file_ in allFiles:
+        if file_.endswith(".pt"):
+            merchant_id = file_.split(".")[0].split("_")[-1]
+            embedding_path = os.path.join(embeddings_folder, file_)
+            embeddings[merchant_id] = torch.load(embedding_path,  map_location=get_device_type())
+        print(merchant_id, len(embeddings[merchant_id]))
+    print("total merchants loaded: ", len(embeddings))
 
 def load_products():
     # Read the CSV file
@@ -27,8 +34,11 @@ def load_products():
 
     # Create the dictionary
     for _, row in df.iterrows():
+        merchant_id = str(row['merchantId'])
+        if merchant_id not in products:
+            products[merchant_id] = {}
         product_id = str(row['id'])
-        products[product_id] = {
+        products[merchant_id][product_id] = {
             'id': product_id,
             'nickname': row['nickname'],
             'price': row['price']
@@ -36,4 +46,7 @@ def load_products():
 
 load_precomputed_embeddings()
 print(len(embeddings))
+print(len(embeddings['1']))
 load_products()
+print(len(products))
+print(len(products['1']))
