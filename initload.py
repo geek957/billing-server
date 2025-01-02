@@ -15,6 +15,9 @@ object_detector = ObjectDetector()
 embeddings = {}
 products = {}
 
+def modify_name(embed_name):
+    return embed_name[0] + "00" + embed_name[1:]
+
 def load_precomputed_embeddings():
     embeddings_folder = "./run_1"
     allFiles = os.listdir(embeddings_folder)
@@ -25,6 +28,10 @@ def load_precomputed_embeddings():
             merchant_id = file_.split(".")[0].split("_")[-1]
             embedding_path = os.path.join(embeddings_folder, file_)
             embeddings[merchant_id] = torch.load(embedding_path,  map_location=get_device_type())
+            keys_to_modify = list(embeddings[merchant_id].keys())
+            for key in keys_to_modify:
+                embeddings[merchant_id][modify_name(key)] = embeddings[merchant_id][key]
+                del embeddings[merchant_id][key] 
         print(merchant_id, len(embeddings[merchant_id]))
     print("total merchants loaded: ", len(embeddings))
 
@@ -40,13 +47,13 @@ def load_products():
         product_id = str(row['id'])
         products[merchant_id][product_id] = {
             'id': product_id,
-            'nickname': row['nickname'],
+            'name': row['name'],
             'price': row['price']
         }
 
 load_precomputed_embeddings()
 print(len(embeddings))
 print(len(embeddings['1']))
-load_products()
-print(len(products))
-print(len(products['1']))
+# load_products()
+# print(len(products))
+# print(len(products['1']))
